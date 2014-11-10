@@ -10,9 +10,9 @@ angular.module('starter.services', [])
   function openDatabase(callback) {
     if (!theDB) {
       theDB = window.openDatabase(dbName, dbVersion, dbDisplayName, dbSize);
-      console.log(theDB);
+      //console.log(theDB);
 
-      theDB.transaction(createTable, onTxError, function() { onTxSuccess(callback) });
+      theDB.transaction(createTable, onTxError, function() { onTxSuccess(callback); });
     }
   }
     
@@ -20,14 +20,14 @@ angular.module('starter.services', [])
     console.log(tx);
     var sqlStr = 'CREATE TABLE IF NOT EXISTS MILEAGE (tripDate INT, miles INT, notes TEXT)';
     
-    console.log(sqlStr);
+    //console.log(sqlStr);
     tx.executeSql(sqlStr, [], onSqlSuccess, onSqlError);
   }
   
   function onSqlSuccess(tx, res) {
     if (res) {
-      console.log('Insert ID: ' + res.insertID);
-      console.log('Row affected: ' + res.rowAffected);
+      //console.log('Insert ID: ' + res.insertID);
+      //console.log('Row affected: ' + res.rowAffected);
       
       if (res.rows) {
         var len = res.rows.length;
@@ -72,26 +72,35 @@ angular.module('starter.services', [])
   }
   
   function onTxSuccess(callback) {
-    console.log('TX: success');
+    //console.log('TX: success');
     
     if (callback) callback();
   }
   
   function onQuerySuccess(tx, result) {
+    console.log('onQuerySuccess: ', result);
     return result;
   }
     
   var getAll = function() {
-    openDatabase(function() {
-      var sqlStr = "SELECT * FROM MILEAGE ORDER BY tripDate ASC";
-      
-      theDB.transaction(function(tx) {
-        tx.executeSql(sqlStr, [], function(tx, result) { 
-          return onQuerySuccess(tx, result); 
-        }, onSqlError);
-      }, onTxError, onTxSuccess);
-      
-    });
+    var retVal;
+    
+    (function() {
+      openDatabase(function() {
+        var sqlStr = "SELECT * FROM MILEAGE ORDER BY tripDate ASC";
+
+        theDB.transaction(function(tx) {
+          tx.executeSql(sqlStr, [], function(tx, result) {
+            console.log('success! ', result.rows);
+            retVal = result.rows;
+
+            //return result; 
+          }, onSqlError);
+        }, onTxError, onTxSuccess);      
+      });
+    })();
+    
+    return retVal;
   };
   
   var getById = function(id) {
@@ -103,7 +112,17 @@ angular.module('starter.services', [])
   };
   
   var insert = function(date, numberOfMiles, notes) {
-    
+    console.log('inserting');
+    console.log('date: ' + date);
+    console.log('numberOfMiles: ' + numberOfMiles);
+    console.log('notes: ' + notes);
+    var sqlStr = "INSERT INTO MILEAGE (tripDate, miles, notes) VALUES ('" + date + "', " + numberOfMiles + ", '" + notes + "')";
+
+    theDB.transaction(function(tx) {
+      tx.executeSql(sqlStr, [], function(tx, result) {
+        return onQuerySuccess(tx, result);
+      }, onSqlError);
+    }, onTxError, onTxSuccess);
   };
   
   return {

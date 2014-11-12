@@ -1,0 +1,16 @@
+<ion-view title="Items">
+  <ion-nav-buttons side="right">
+    <a class="button button-icon ion-ios7-plus-outline" href="#/newitem"></a>
+  </ion-nav-buttons>
+  <ion-content>
+    
+    <ion-list>
+      <ion-item class="item-icon-right" ng-repeat="item in items" href="#/item/{{item.id}}"
+                on-hold="showActions(item)">        
+        {{item.name}}
+        <i class="icon" ng-class="{'ion-happy': item.like == 'true', 'ion-sad': item.like != 'true'}"></i>
+      </ion-item>
+    </ion-list>
+    
+  </ion-content>
+</ion-view>

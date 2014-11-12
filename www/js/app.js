@@ -13,9 +13,37 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
     if(window.StatusBar) {
+      // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
   });
-  
-  var theDB = window.openDatabase('mtDB', '1.0', 'Mileage Tracker', 3 * 1024 * 1024);
+})
+
+.config(function($stateProvider, $urlRouterProvider) {
+
+  // Ionic uses AngularUI Router which uses the concept of states
+  // Learn more here: https://github.com/angular-ui/ui-router
+  // Set up the various states which the app can be in.
+  // Each state's controller can be found in controllers.js
+  $stateProvider
+    // setup an abstract state for the tabs directive
+    .state('items', {
+      url: "/items",
+      controller: 'ItemsCtrl',
+      templateUrl: "templates/items.html"
+    })
+    .state('item-detail', {
+      url: "/item/:itemId",
+      controller: 'ItemDetailCtrl',
+      templateUrl: "templates/item-detail.html"
+    })
+    .state('newitem', {
+      url: "/newitem",
+      controller: 'NewItemCtrl',
+      templateUrl: 'templates/item-detail.html'
+    });
+
+  // if none of the above states are matched, use this as the fallback
+  $urlRouterProvider.otherwise('/items');
+
 });

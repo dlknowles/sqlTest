@@ -1,12 +1,17 @@
 <ion-view title="Items">
+  <ion-nav-buttons side="left">
+    <button class="button" ng-show="showDelete" ng-click="toggleDelete()">Done</button>
+  </ion-nav-buttons>
   <ion-nav-buttons side="right">
     <a class="button button-icon ion-ios7-plus-outline" href="#/newitem"></a>
   </ion-nav-buttons>
   <ion-content>
     
-    <ion-list>
+    <ion-list show-delete="showDelete" show-option="true">
       <ion-item class="item-icon-right" ng-repeat="item in items" href="#/item/{{item.id}}"
-                on-hold="showActions(item)">        
+                on-hold="toggleDelete()">   
+        <ion-delete-button class="ion-minus-circled"></ion-delete-button>
+        <ion-option-button class="button-positive">Cancel</ion-option-button>
         {{item.name}}
         <i class="icon" ng-class="{'ion-happy': item.like == 'true', 'ion-sad': item.like != 'true'}"></i>
       </ion-item>

@@ -2,7 +2,8 @@ angular.module('starter.controllers', [])
 
 .controller('ItemsCtrl', function($scope, $state, $ionicActionSheet, Database) {
   $scope.items = [];
-   
+  $scope.showDelete = false;
+  
   function init() {
     //console.log('init...');
     
@@ -35,6 +36,10 @@ angular.module('starter.controllers', [])
     
     Database.updateItem(item.id, item.name, item.notes, item.like)
       .then(init);
+  };
+  
+  $scope.toggleDelete = function() {
+    $scope.showDelete = !$scope.showDelete;
   };
   
   $scope.showActions = function(item) {

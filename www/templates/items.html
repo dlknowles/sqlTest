@@ -10,7 +10,7 @@
     <ion-list show-delete="showDelete" show-option="true">
       <ion-item class="item-icon-right" ng-repeat="item in items" href="#/item/{{item.id}}"
                 on-hold="toggleDelete()">   
-        <ion-delete-button class="ion-minus-circled"></ion-delete-button>
+        <ion-delete-button class="ion-minus-circled" ng-click="deleteItem(item.id)"></ion-delete-button>
         <ion-option-button class="button-positive">Cancel</ion-option-button>
         {{item.name}}
         <i class="icon" ng-class="{'ion-happy': item.like == 'true', 'ion-sad': item.like != 'true'}"></i>
